@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOSH Dhanmondi — Pan-Asian & Japanese Kitchen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500;600&family=Hind+Siliguri:wght@300;400;500;600&family=Noto+Serif+Bengali:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f0d0b; --ink2:#181512; --ink3:#221d18;
+    --cream:#f3eadb; --muted:#a89c8a; --line:rgba(243,234,219,.12);
+    --red:#d6452f; --gold:#c9a45c;
+    --serif:'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --sans:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--cream);font-family:var(--sans);font-weight:300;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block}
+
+  /* demo ribbon */
+  .demo{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--red);color:#fff;font-size:12px;letter-spacing:.04em;text-align:center;padding:6px 12px;font-weight:500}
+  .demo b{font-weight:600}
+  .demo .short{display:none}
+  @media(max-width:600px){.demo .long{display:none}.demo .short{display:inline}}
+
+  /* nav */
+  nav{position:fixed;top:30px;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 6vw;transition:background .4s, padding .4s, backdrop-filter .4s}
+  nav.scrolled{background:rgba(15,13,11,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:10px 6vw;border-bottom:1px solid var(--line)}
+  .logo{font-family:var(--serif);font-size:28px;font-weight:600;letter-spacing:.18em}
+  .logo span{color:var(--red)}
+  .navlinks{display:flex;gap:28px;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+  .navlinks a{opacity:.75;transition:opacity .3s}
+  .navlinks a:hover{opacity:1}
+  .navcta{border:1px solid var(--gold);color:var(--gold);padding:8px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;transition:all .3s}
+  .navcta:hover{background:var(--gold);color:var(--ink)}
+  @media(max-width:760px){.navlinks{display:none}}
+  .navright{display:flex;align-items:center;gap:12px}
+  .lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(15,13,11,.5);cursor:pointer;font-family:var(--sans)}
+  .lang span{padding:6px 11px;border-radius:999px;font-size:12px;letter-spacing:.06em;color:var(--muted);transition:background .35s,color .35s}
+  .lang span[data-l="bn"]{font-family:'Hind Siliguri',sans-serif;font-size:13px;letter-spacing:0}
+  html[lang="en"] .lang span[data-l="en"], html[lang="bn"] .lang span[data-l="bn"]{background:var(--gold);color:var(--ink);font-weight:600}
+  .swap{transition:opacity .22s ease}
+  body.fading .swap{opacity:0}
+  /* Bangla typography */
+  html[lang="bn"] body{font-family:'Hind Siliguri',var(--sans);font-weight:400}
+  html[lang="bn"] p{font-size:1.08em}
+  html[lang="bn"] .sig p,html[lang="bn"] .item p,html[lang="bn"] .feat p,html[lang="bn"] .vcard p{font-size:16px}
+  html[lang="bn"] .navlinks a{font-size:15px}
+  html[lang="bn"] h1,html[lang="bn"] h2,html[lang="bn"] .item h4,html[lang="bn"] .feat h5,html[lang="bn"] .vcard h4,html[lang="bn"] .meta strong,html[lang="bn"] .score{font-family:'Noto Serif Bengali',var(--serif)}
+  html[lang="bn"] h1{font-size:clamp(40px,7vw,96px);line-height:1.22}
+  html[lang="bn"] h1 .line{padding-bottom:.1em}
+  html[lang="bn"] h2{font-size:clamp(32px,4.6vw,58px);line-height:1.3}
+  html[lang="bn"] em{font-style:normal}
+  html[lang="bn"] .kicker,html[lang="bn"] .btn,html[lang="bn"] .tab,html[lang="bn"] .navlinks,html[lang="bn"] .navcta,html[lang="bn"] .badge,html[lang="bn"] .tag,html[lang="bn"] .k,html[lang="bn"] .vcard a.link,html[lang="bn"] .rev span{letter-spacing:.02em;font-size:14px}
+  html[lang="bn"] .item h4{font-size:22px}
+  html[lang="bn"] .hero p.lead{font-size:19px;line-height:1.75}
+
+  /* hero */
+  .hero{min-height:100svh;display:flex;align-items:flex-end;padding:140px 6vw 90px;position:relative;overflow:hidden}
+  .hero > div:not(.hero-bg){position:relative;z-index:2;max-width:760px}
+  .hero-bg{position:absolute;inset:-6% 0 0 0;z-index:0}
+  .hero-bg img{width:100%;height:100%;object-fit:cover;animation:kenburns 22s ease-in-out infinite alternate;transform-origin:60% 40%}
+  @keyframes kenburns{from{transform:scale(1.04)}to{transform:scale(1.14) translate(-1.5%,-1%)}}
+  .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,13,11,.55) 0%,rgba(15,13,11,.35) 35%,rgba(15,13,11,.88) 78%,var(--ink) 100%),linear-gradient(90deg,rgba(15,13,11,.75) 0%,rgba(15,13,11,0) 65%)}
+  .hero::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 60% 50% at 75% 45%, rgba(214,69,47,.18), transparent 70%),radial-gradient(ellipse 40% 40% at 10% 90%, rgba(201,164,92,.10), transparent 70%);pointer-events:none}
+  .kicker{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;display:flex;align-items:center;gap:14px}
+  .kicker::before{content:"";width:40px;height:1px;background:var(--gold)}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(48px,8.5vw,118px);line-height:.95;letter-spacing:-.01em}
+  h1 .line{display:block;overflow:hidden}
+  h1 .line span{display:inline-block;transform:translateY(110%);animation:rise 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+  h1 .line:nth-child(2) span{animation-delay:.15s}
+  h1 .line:nth-child(3) span{animation-delay:.3s}
+  h1 em{font-style:italic;color:var(--red)}
+  @keyframes rise{to{transform:translateY(0)}}
+  .hero p.lead{max-width:480px;margin-top:28px;color:#d9cdb9;font-size:16px;opacity:0;animation:fade 1s .7s forwards}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px;opacity:0;animation:fade 1s .9s forwards}
+  @keyframes fade{to{opacity:1}}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;transition:transform .3s, background .3s, color .3s}
+  .btn-red{background:var(--red);color:#fff}
+  .btn-red:hover{transform:translateY(-2px);background:#e5533c}
+  .btn-ghost{border:1px solid var(--line);color:var(--cream)}
+  .btn-ghost:hover{border-color:var(--cream)}
+  .meta{display:flex;gap:28px;margin-top:44px;font-size:13px;color:var(--muted);opacity:0;animation:fade 1s 1.1s forwards;flex-wrap:wrap}
+  .meta strong{display:block;font-family:var(--serif);font-size:30px;color:var(--cream);font-weight:500;line-height:1}
+  .stars{color:var(--gold);letter-spacing:2px}
+
+  /* hero art */
+  .art{position:relative;aspect-ratio:1;max-width:520px;width:100%;justify-self:center;opacity:0;animation:fade 1.4s .4s forwards}
+  .ring{position:absolute;inset:0;animation:spin 40s linear infinite}
+  .ring text{font-family:var(--sans);font-size:11.5px;letter-spacing:.42em;fill:var(--gold);text-transform:uppercase}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .sun{position:absolute;inset:16%;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e7604a, var(--red) 55%, #8f2a1c);box-shadow:0 0 120px rgba(214,69,47,.35);animation:breathe 6s ease-in-out infinite}
+  @keyframes breathe{50%{transform:scale(1.03)}}
+  .bowl{position:absolute;left:50%;top:56%;width:62%;transform:translate(-50%,-50%)}
+  .steam path{fill:none;stroke:var(--cream);stroke-width:2.2;stroke-linecap:round;opacity:0;animation:steam 3.6s ease-in-out infinite}
+  .steam path:nth-child(2){animation-delay:1.2s}
+  .steam path:nth-child(3){animation-delay:2.4s}
+  @keyframes steam{0%{opacity:0;transform:translateY(14px)}35%{opacity:.75}100%{opacity:0;transform:translateY(-26px)}}
+  .chop{transform-origin:70% 80%;animation:chop 5s ease-in-out infinite}
+  @keyframes chop{50%{transform:rotate(-4deg) translateY(-4px)}}
+
+  @media(max-width:900px){
+    .hero{padding:120px 6vw 60px}
+    .hero-bg img{object-position:50% 30%}
+    .hero-bg::after{background:linear-gradient(180deg,rgba(15,13,11,.62) 0%,rgba(15,13,11,.72) 40%,rgba(15,13,11,.93) 80%,var(--ink) 100%)}
+  }
+
+  /* marquee */
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:22px 0;background:var(--ink2)}
+  .track{display:flex;gap:48px;width:max-content;animation:scroll 32s linear infinite}
+  .track span{font-family:var(--serif);font-size:30px;font-style:italic;white-space:nowrap;color:var(--cream)}
+  .track i{color:var(--red);font-style:normal;font-size:20px;align-self:center}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* sections */
+  section{padding:110px 6vw}
+  .sec-head{max-width:640px;margin-bottom:56px}
+  h2{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5.5vw,68px);line-height:1.02}
+  h2 em{font-style:italic;color:var(--gold)}
+  .sec-head p{color:var(--muted);margin-top:18px}
+
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.2,.8,.2,1), transform 1s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* signature */
+  .sig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .sig{background:var(--ink2);border:1px solid var(--line);padding:0 0 32px;position:relative;overflow:hidden;transition:transform .5s, border-color .5s}
+  .sig:hover{transform:translateY(-6px);border-color:rgba(201,164,92,.5)}
+  .sig .num{position:absolute;top:16px;left:18px;z-index:2;font-family:var(--serif);font-size:15px;color:var(--cream);letter-spacing:.2em;background:rgba(15,13,11,.6);padding:4px 10px;backdrop-filter:blur(4px)}
+  .sig .photo{aspect-ratio:4/3;overflow:hidden;margin-bottom:26px}
+  .sig .photo img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+  .sig:hover .photo img{transform:scale(1.08)}
+  .sig h3,.sig p,.sig .tag{margin-left:28px;margin-right:28px}
+  .sig .tag{display:inline-block}
+    .sig h3{font-family:var(--serif);font-size:30px;font-weight:500;line-height:1.1}
+  .sig p{color:var(--muted);font-size:14.5px;margin-top:10px}
+  .sig .tag{display:inline-block;margin-top:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+  @media(max-width:900px){.sig-grid{grid-template-columns:1fr}}
+
+  /* menu */
+  #menu{background:var(--ink2)}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:44px;border-bottom:1px solid var(--line)}
+  .tab{background:none;border:none;color:var(--muted);font-family:var(--sans);font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:14px 18px;cursor:pointer;position:relative;transition:color .3s}
+  .tab::after{content:"";position:absolute;left:18px;right:18px;bottom:-1px;height:2px;background:var(--red);transform:scaleX(0);transition:transform .4s}
+  .tab.active{color:var(--cream)}
+  .tab.active::after{transform:scaleX(1)}
+  .panel{display:none;grid-template-columns:1fr 1fr;gap:6px 70px}
+  .panel.active{display:grid}
+  .panel .item{opacity:0;transform:translateY(16px);animation:itemIn .6s forwards}
+  @keyframes itemIn{to{opacity:1;transform:none}}
+  .item{padding:22px 0;border-bottom:1px dashed var(--line)}
+  .item-top{display:flex;align-items:baseline;gap:14px}
+  .item h4{font-family:var(--serif);font-size:25px;font-weight:500}
+  .item .dots{flex:1;border-bottom:1px dotted rgba(243,234,219,.25);transform:translateY(-6px)}
+  .item .badge{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+  .item p{color:var(--muted);font-size:14px;margin-top:4px}
+  .menu-note{margin-top:36px;font-size:13px;color:var(--muted)}
+  @media(max-width:760px){.panel{grid-template-columns:1fr}.tab{padding:12px 12px;font-size:12px}}
+
+  /* ambience */
+  .amb{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .amb-art{aspect-ratio:4/3;border:1px solid var(--line);position:relative;overflow:hidden}
+  .amb-art img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);transition:transform 2.2s cubic-bezier(.2,.8,.2,1)}
+  .amb-art.in img{transform:scale(1)}
+  .lantern{position:absolute;width:64px;top:-10px;animation:sway 5s ease-in-out infinite;transform-origin:50% 0}
+  .lantern:nth-child(2){left:62%;width:48px;animation-delay:-2s;animation-duration:6s}
+  .lantern:nth-child(1){left:22%}
+  @keyframes sway{50%{transform:rotate(5deg)}}
+  .amb-art .glow{position:absolute;inset:auto 0 0 0;height:55%;background:radial-gradient(ellipse 70% 60% at 50% 100%, rgba(201,164,92,.22), transparent 70%)}
+  .amb-art .table{position:absolute;left:12%;right:12%;bottom:18%}
+  .feats{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:40px}
+  .feat h5{font-family:var(--serif);font-size:22px;font-weight:500}
+  .feat p{color:var(--muted);font-size:14px}
+  .feat .k{font-size:11px;letter-spacing:.2em;color:var(--red);text-transform:uppercase}
+  @media(max-width:900px){.amb{grid-template-columns:1fr;gap:44px}}
+
+  /* reviews */
+  .rev-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;align-items:start}
+  .score{font-family:var(--serif);font-size:clamp(90px,13vw,160px);line-height:.9;color:var(--cream)}
+  .score small{font-size:.3em;color:var(--muted)}
+  .reviews{display:grid;gap:18px}
+  .rev{border-left:2px solid var(--red);padding:6px 0 6px 24px}
+  .rev q{font-family:var(--serif);font-size:24px;font-style:italic;line-height:1.3;quotes:"\201C" "\201D"}
+  .rev span{display:block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+  @media(max-width:900px){.rev-wrap{grid-template-columns:1fr;gap:30px}}
+
+  /* visit */
+  #visit{background:var(--ink2);border-top:1px solid var(--line)}
+  .visit{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .vcard{border:1px solid var(--line);padding:32px 28px}
+  .vcard .k{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+  .vcard h4{font-family:var(--serif);font-size:28px;font-weight:500;margin:12px 0 8px;line-height:1.15}
+  .vcard p{color:var(--muted);font-size:14.5px}
+  .vcard a.link{display:inline-block;margin-top:16px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);border-bottom:1px solid currentColor;padding-bottom:3px}
+  @media(max-width:900px){.visit{grid-template-columns:1fr}}
+
+  .final{text-align:center;padding:120px 6vw}
+  .final h2{max-width:800px;margin:0 auto 34px}
+
+  footer{border-top:1px solid var(--line);padding:34px 6vw;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--muted)}
+  footer a{color:var(--gold)}
+
+  /* floating */
+  .fab{position:fixed;right:20px;bottom:20px;z-index:55;width:58px;height:58px;border-radius:50%;background:#25d366;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:pulse 2.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}70%{box-shadow:0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    h1 .line span,.hero p.lead,.hero-ctas,.meta,.reveal,.panel .item{opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="demo"><span class="long" data-bn="NOSH-এর জন্য ওয়েবসাইট প্রিভিউ তৈরি করেছে ">Website preview prepared for NOSH by </span><span class="short" data-bn="প্রিভিউ: ">Preview by </span><b>FutureStack Solutions</b></div>
+
+<nav id="nav">
+  <a href="#top" class="logo">NOSH<span>.</span></a>
+  <div class="navlinks">
+    <a href="#signature" data-bn="সিগনেচার">Signature</a>
+    <a href="#menu" data-bn="মেনু">Menu</a>
+    <a href="#ambience" data-bn="পরিবেশ">Ambience</a>
+    <a href="#visit" data-bn="ঠিকানা">Visit</a>
+  </div>
+  <div class="navright">
+    <button class="lang" id="lang" aria-label="Switch language / ভাষা পরিবর্তন"><span data-l="en">EN</span><span data-l="bn">বাং</span></button>
+    <a href="tel:+8801805226696" class="navcta" data-bn="বুকিং">Reserve</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-bg"><img src="img/hero.jpg" alt="A spread of NOSH dishes: nasi goreng, gyoza, sushi and noodles"></div>
+  <div>
+    <div class="kicker" data-bn="রোড ২ · ধানমন্ডি">Road 2 · Dhanmondi</div>
+    <h1>
+      <span class="line"><span data-bn="প্যান-এশিয়ান">Pan-Asian</span></span>
+      <span class="line"><span data-bn="ও জাপানিজ স্বাদ,">&amp; Japanese,</span></span>
+      <span class="line"><span data-bn="&lt;em&gt;ভাগ করে খাওয়ার মজা।&lt;/em&gt;"><em>made to share.</em></span></span>
+    </h1>
+    <p class="lead" data-bn="ওয়োকে ভাজা নাসি গোরেং থেকে থাই বিফ সালাদ আর হাতে বানানো মাকি। ধানমন্ডি রোড ২-এ NOSH নিয়ে এসেছে এশিয়ার আসল স্বাদ, ঐতিহ্য আর আধুনিকতার মেলবন্ধনে সাজানো পরিবেশে।">From wok-tossed Nasi Goreng to Thai beef salads and hand-rolled maki, NOSH brings the flavours of Asia to Road 2, Dhanmondi, in a room that's half tradition, half modern.</p>
+    <div class="hero-ctas">
+      <a href="#menu" class="btn btn-red" data-bn="মেনু দেখুন →">Explore the menu →</a>
+      <a href="tel:+8801805226696" class="btn btn-ghost" data-bn="টেবিল বুক করুন">Book a table</a>
+    </div>
+    <div class="meta">
+      <div data-bn="&lt;strong&gt;৪.৪&lt;/strong&gt;&lt;span class=&quot;stars&quot;&gt;★★★★☆&lt;/span&gt; ৩৬৭টি গুগল রিভিউ"><strong>4.4</strong><span class="stars">★★★★☆</span> 367 Google reviews</div>
+      <div data-bn="&lt;strong&gt;১১–১১&lt;/strong&gt;প্রতিদিন খোলা"><strong>11–11</strong>Open every day</div>
+    </div>
+  </div>
+
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Nasi Goreng</span><i>●</i><span>Beef Nam Tok</span><i>●</i><span>Chicken Gyoza</span><i>●</i><span>Ebi Tempura Maki</span><i>●</i><span>Beef Basil</span><i>●</i><span>Crab Rangoon</span><i>●</i><span>Tori no Teriyaki</span><i>●</i><span>Chili Oil Wonton</span><i>●</i>
+    <span>Nasi Goreng</span><i>●</i><span>Beef Nam Tok</span><i>●</i><span>Chicken Gyoza</span><i>●</i><span>Ebi Tempura Maki</span><i>●</i><span>Beef Basil</span><i>●</i><span>Crab Rangoon</span><i>●</i><span>Tori no Teriyaki</span><i>●</i><span>Chili Oil Wonton</span><i>●</i>
+  </div>
+</div>
+
+<section id="signature">
+  <div class="sec-head reveal">
+    <div class="kicker" data-bn="অতিথিদের প্রিয়">Guest favourites</div>
+    <h2 data-bn="যে খাবারের টানে &lt;em&gt;সবাই ফিরে আসে।&lt;/em&gt;">The dishes people <em>come back for.</em></h2>
+    <p data-bn="অতিথিদের রিভিউতে বারবার উঠে আসা তিনটি পদ।">Three plates that keep showing up in our guests' reviews.</p>
+  </div>
+  <div class="sig-grid">
+    <article class="sig reveal">
+      <div class="num">01</div>
+      <div class="photo"><img src="img/nasi-goreng.jpg" alt="Nasi goreng with a fried egg and prawn crackers" loading="lazy"></div>
+      <h3>Nasi Goreng</h3>
+      <p data-bn="ইন্দোনেশিয়ান স্টাইলের ফ্রাইড রাইস, ওয়োকের আঁচে ভাজা, উপরে ডিম ভাজা।">Indonesian-style fried rice, wok-charred and finished with a fried egg.</p>
+      <span class="tag" data-bn="সবচেয়ে জনপ্রিয়">Most recommended</span>
+    </article>
+    <article class="sig reveal">
+      <div class="num">02</div>
+      <div class="photo"><img src="img/nam-tok.jpg" alt="Beef nam tok salad with zucchini, tomato, mint and lime" loading="lazy"></div>
+      <h3>Beef Nam Tok</h3>
+      <p data-bn="জুকিনি, চেরি টমেটো, লেবু আর টোস্টেড রাইস দিয়ে থাই গ্রিলড বিফ সালাদ।">Thai grilled-beef salad with zucchini, cherry tomato, lime and toasted rice.</p>
+      <span class="tag" data-bn="অতিথিদের পছন্দ">Guest favourite</span>
+    </article>
+    <article class="sig reveal">
+      <div class="num">03</div>
+      <div class="photo"><img src="img/gyoza.jpg" alt="Pan-fried chicken gyoza with chili oil" loading="lazy"></div>
+      <h3>Chicken Gyoza</h3>
+      <p data-bn="ভরপুর পুর দেওয়া ডাম্পলিং, বাইরে মচমচে, সাথে চিলি অয়েল।">Generously filled dumplings, crisp on the outside, served with chili oil.</p>
+      <span class="tag" data-bn="শেয়ার করে খাওয়ার জন্য সেরা">Perfect to share</span>
+    </article>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="sec-head reveal">
+    <div class="kicker" data-bn="আমাদের মেনু">The menu</div>
+    <h2 data-bn="ছোট প্লেট থেকে &lt;em&gt;ভরপুর বাটি।&lt;/em&gt;">Small plates to <em>full bowls.</em></h2>
+  </div>
+
+  <div class="tabs reveal" role="tablist">
+    <button class="tab active" data-t="starters" role="tab" data-bn="স্টার্টার">Starters</button>
+    <button class="tab" data-t="sushi" role="tab" data-bn="সুশি ও মাকি">Sushi &amp; Maki</button>
+    <button class="tab" data-t="thai" role="tab" data-bn="থাই ও ওয়োক">Thai &amp; Wok</button>
+    <button class="tab" data-t="rice" role="tab" data-bn="রাইস ও বোল">Rice &amp; Bowls</button>
+  </div>
+
+  <div class="panel active" id="starters">
+    <div class="item"><div class="item-top"><h4>Chicken Gyoza</h4><span class="dots"></span><span class="badge" data-bn="জনপ্রিয়">Popular</span></div><p data-bn="চিলি অয়েলের সাথে প্যান-ফ্রায়েড জাপানিজ ডাম্পলিং।">Pan-fried Japanese dumplings with chili oil.</p></div>
+    <div class="item"><div class="item-top"><h4>Crab Rangoon</h4><span class="dots"></span></div><p data-bn="আসল কাঁকড়া আর ক্রিম চিজে ভরা মচমচে ওয়ানটন।">Crisp wontons with real crab and cream cheese.</p></div>
+    <div class="item"><div class="item-top"><h4>Chili Oil Wonton</h4><span class="dots"></span><span class="badge" data-bn="ঝাল">Spicy</span></div><p data-bn="সুগন্ধি হাউস চিলি অয়েলে নরম ওয়ানটন।">Silky wontons in fragrant house chili oil.</p></div>
+    <div class="item"><div class="item-top"><h4>Beef Nam Tok</h4><span class="dots"></span><span class="badge" data-bn="শেফের পছন্দ">Chef's pick</span></div><p data-bn="থাই গ্রিলড বিফ সালাদ, জুকিনি, চেরি টমেটো।">Thai grilled-beef salad, zucchini, cherry tomato.</p></div>
+  </div>
+
+  <div class="panel" id="sushi">
+    <div class="item"><div class="item-top"><h4>Ebi Tempura Maki</h4><span class="dots"></span></div><p data-bn="সিজনড রাইসে মোড়ানো মচমচে চিংড়ি টেম্পুরা।">Crispy prawn tempura rolled with seasoned rice.</p></div>
+    <div class="item"><div class="item-top"><h4>Chicken Cheese Maki</h4><span class="dots"></span></div><p data-bn="নরম মাকি রোলে চিকেন আর ক্রিম চিজ।">Chicken and cream cheese in a soft maki roll.</p></div>
+    <div class="item"><div class="item-top"><h4 data-bn="শেফের সুশি সিলেকশন">Chef's Sushi Selection</h4><span class="dots"></span></div><p data-bn="নিগিরি ও মাকির নিয়মিত বদলে যাওয়া বিশেষ প্লেট।">A rotating plate of nigiri and maki.</p></div>
+    <div class="item"><div class="item-top"><h4>Tori no Teriyaki</h4><span class="dots"></span></div><p data-bn="মিষ্টি-নোনতা তেরিয়াকি সসে গ্লেজড চিকেন।">Glazed chicken in a sweet-savoury teriyaki sauce.</p></div>
+  </div>
+
+  <div class="panel" id="thai">
+    <div class="item"><div class="item-top"><h4>Beef Basil</h4><span class="dots"></span><span class="badge" data-bn="জনপ্রিয়">Popular</span></div><p data-bn="তুলসী পাতা, মরিচ আর রসুন দিয়ে ওয়োকে ভাজা বিফ।">Wok-fried beef with holy basil, chili and garlic.</p></div>
+    <div class="item"><div class="item-top"><h4>Kung Pao Chicken</h4><span class="dots"></span><span class="badge" data-bn="ঝাল">Spicy</span></div><p data-bn="শুকনো মরিচ আর চিনাবাদামের সাথে গরম গরম চিকেন।">Chicken, dried chili and peanuts, tossed hot.</p></div>
+  </div>
+
+  <div class="panel" id="rice">
+    <div class="item"><div class="item-top"><h4>Nasi Goreng</h4><span class="dots"></span><span class="badge" data-bn="অবশ্যই চেখে দেখুন">Must try</span></div><p data-bn="ডিম ভাজা দিয়ে ইন্দোনেশিয়ান ফ্রাইড রাইস।">Indonesian fried rice topped with a fried egg.</p></div>
+    <div class="item"><div class="item-top"><h4>Seafood Fried Rice</h4><span class="dots"></span></div><p data-bn="চিংড়ি আর সি-ফুডে ভরপুর ওয়োক-ফ্রায়েড রাইস।">Wok-fried rice loaded with prawn and seafood.</p></div>
+    <div class="item"><div class="item-top"><h4>Katsu Rice Bowl</h4><span class="dots"></span></div><p data-bn="কাৎসু সসের সাথে ভাতের উপর মচমচে কাটলেট।">Crumbed cutlet over rice with katsu sauce.</p></div>
+    <div class="item"><div class="item-top"><h4>Teriyaki Rice Bowl</h4><span class="dots"></span></div><p data-bn="তেরিয়াকি চিকেন, স্টিমড রাইস, আচারি সবজি।">Teriyaki chicken, steamed rice, pickled greens.</p></div>
+  </div>
+
+  <p class="menu-note reveal" data-bn="দামসহ পুরো মেনু রেস্টুরেন্টে পাওয়া যাবে। অর্ডার করতে কল বা হোয়াটসঅ্যাপ করুন।">Full menu with prices available in-house. Call or WhatsApp to order.</p>
+</section>
+
+<section id="ambience">
+  <div class="amb">
+    <div class="amb-art reveal"><img src="img/ambience.jpg" alt="NOSH dining room with red lanterns and warm lighting" loading="lazy"></div>
+    <div class="reveal">
+      <div class="kicker" data-bn="আমাদের পরিবেশ">The space</div>
+      <h2 data-bn="ঐতিহ্যের উষ্ণতা, &lt;em&gt;আধুনিক ছোঁয়া।&lt;/em&gt;">Old-world warmth, <em>modern lines.</em></h2>
+      <p style="color:var(--muted);margin-top:18px;max-width:520px" data-bn="আমাদের ডাইনিং রুমে মিশেছে ঐতিহ্য আর আধুনিক ডিজাইন। লম্বা ডিনার, পরিবারের সাথে সন্ধ্যা কিংবা বন্ধুদের আড্ডার জন্য একদম উপযুক্ত, ধানমন্ডির প্রাণকেন্দ্রে।">Our dining room blends traditional and modern design. It's built for long dinners, family nights and catching up with friends, right in the heart of Dhanmondi.</p>
+      <div class="feats">
+        <div class="feat"><div class="k" data-bn="পার্কিং">Parking</div><h5 data-bn="বেসমেন্ট পার্কিং">Basement parking</h5><p data-bn="গাড়ি নিয়ে আসুন, জায়গা খোঁজার ঝামেলা নেই।">Drive in, no hunting for a spot.</p></div>
+        <div class="feat"><div class="k" data-bn="সময়সূচি">Hours</div><h5 data-bn="সকাল ১১টা – রাত ১১টা">11 AM – 11 PM</h5><p data-bn="দুপুরের খাবার থেকে রাতের ডিনার, সপ্তাহের প্রতিদিন।">Lunch to late dinner, all week.</p></div>
+        <div class="feat"><div class="k" data-bn="গ্রুপ">Groups</div><h5 data-bn="পরিবার ও বন্ধুরা">Family &amp; friends</h5><p data-bn="বড় টেবিলের জন্য আগে কল করুন।">Call ahead for larger tables.</p></div>
+        <div class="feat"><div class="k" data-bn="খাবার">Cuisine</div><h5 data-bn="প্যান-এশিয়ান · জাপানিজ">Pan-Asian · Japanese</h5><p data-bn="থাই, ইন্দোনেশিয়ান, চাইনিজ, জাপানিজ।">Thai, Indonesian, Chinese, Japanese.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="rev-wrap">
+    <div class="reveal">
+      <div class="kicker" data-bn="গুগলে রেটিং">On Google</div>
+      <div class="score" data-bn="৪.৪&lt;small&gt; / ৫&lt;/small&gt;">4.4<small> / 5</small></div>
+      <p style="color:var(--muted);margin-top:10px" data-bn="&lt;span class=&quot;stars&quot;&gt;★★★★☆&lt;/span&gt; &amp;nbsp;৩৬৭টি রিভিউ থেকে"><span class="stars">★★★★☆</span> &nbsp;from 367 reviews</p>
+    </div>
+    <div class="reviews">
+      <div class="rev reveal"><q>The beef basil is very good.</q><span data-bn="গুগল রিভিউ">Google review</span></div>
+      <div class="rev reveal"><q>The staff were friendly, attentive, and made us feel welcome.</q><span data-bn="গুগল রিভিউ">Google review</span></div>
+      <div class="rev reveal"><q>Having basement parking is a big plus.</q><span data-bn="গুগল রিভিউ">Google review</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="sec-head reveal">
+    <div class="kicker" data-bn="আমাদের ঠিকানা">Visit us</div>
+    <h2 data-bn="NOSH-এ &lt;em&gt;আপনার টেবিল অপেক্ষা করছে।&lt;/em&gt;">Find your table <em>at NOSH.</em></h2>
+  </div>
+  <div class="visit">
+    <div class="vcard reveal"><div class="k" data-bn="ঠিকানা">Address</div><h4 data-bn="বাড়ি ৩২/এ, রোড ২&lt;br&gt;ধানমন্ডি, ঢাকা ১২০৫">House 32/A, Road 2<br>Dhanmondi, Dhaka 1205</h4><a class="link" href="https://maps.google.com/?q=NOSH+Dhanmondi+House+32/A+Road+2+Dhaka" target="_blank" rel="noopener" data-bn="দিকনির্দেশনা দেখুন →">Get directions →</a></div>
+    <div class="vcard reveal"><div class="k" data-bn="সময়সূচি">Hours</div><h4 data-bn="প্রতিদিন&lt;br&gt;সকাল ১১টা – রাত ১১টা">Every day<br>11:00 AM – 11:00 PM</h4><p data-bn="দুপুর, রাত আর মাঝের সব সময়।">Lunch, dinner and everything in between.</p></div>
+    <div class="vcard reveal"><div class="k" data-bn="রিজার্ভেশন">Reservations</div><h4>+880 1805-226696</h4><a class="link" href="tel:+8801805226696" data-bn="কল করে বুক করুন →">Call to book →</a></div>
+  </div>
+</section>
+
+<section class="final">
+  <h2 class="reveal" data-bn="খিদে পেয়েছে? &lt;em&gt;চলুন টেবিল বুক করি।&lt;/em&gt;">Hungry yet? <em>Let's get you a table.</em></h2>
+  <div class="reveal" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+    <a href="tel:+8801805226696" class="btn btn-red" data-bn="এখনই কল করুন">Call now</a>
+    <a href="https://wa.me/8801805226696" target="_blank" rel="noopener" class="btn btn-ghost" data-bn="হোয়াটসঅ্যাপে অর্ডার করুন">Order on WhatsApp</a>
+  </div>
+</section>
+
+<footer>
+  <div data-bn="© NOSH ধানমন্ডি · প্যান-এশিয়ান ও জাপানিজ কিচেন">© NOSH Dhanmondi · Pan-Asian &amp; Japanese Kitchen</div>
+  <div data-bn="ওয়েবসাইট তৈরি করেছে &lt;a href=&quot;#&quot;&gt;FutureStack Solutions&lt;/a&gt;">Website by <a href="#">FutureStack Solutions</a></div>
+</footer>
+
+<a class="fab" href="https://wa.me/8801805226696" target="_blank" rel="noopener" aria-label="Order on WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 32 32" fill="#fff"><path d="M16 3C8.8 3 3 8.7 3 15.8c0 2.3.6 4.5 1.8 6.4L3 29l7-1.8c1.8 1 3.9 1.5 6 1.5 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-4.1 1.1 1.1-4-.3-.4c-1.1-1.7-1.6-3.6-1.6-5.6C5.3 10 10.1 5.3 16 5.3S26.7 10 26.7 15.8 21.9 26.4 16 26.4zm5.9-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.7s1.2 3.2 1.4 3.4c.2.2 2.4 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.7-.4z"/></svg>
+</a>
+
+<script>
+  // ---- language toggle ----
+  const T={en:{title:"NOSH Dhanmondi — Pan-Asian & Japanese Kitchen"},bn:{title:"NOSH ধানমন্ডি — প্যান-এশিয়ান ও জাপানিজ কিচেন"}};
+  const els=[...document.querySelectorAll('[data-bn]')];
+  els.forEach(e=>{e.dataset.en=e.innerHTML;e.classList.add('swap')});
+  function setLang(l,animate){
+    const apply=()=>{
+      els.forEach(e=>{e.innerHTML=e.dataset[l]});
+      document.documentElement.lang=l; document.title=T[l].title;
+      try{localStorage.setItem('nosh-lang',l)}catch(_){}
+    };
+    if(!animate){apply();return}
+    document.body.classList.add('fading');
+    setTimeout(()=>{apply();document.body.classList.remove('fading')},220);
+  }
+  let start='en';
+  try{start=new URLSearchParams(location.search).get('lang')||localStorage.getItem('nosh-lang')||'en'}catch(_){}
+  setLang(start==='bn'?'bn':'en',false);
+  document.getElementById('lang').addEventListener('click',()=>setLang(document.documentElement.lang==='bn'?'en':'bn',true));
+
+  // nav background on scroll
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
+
+  // scroll reveal with stagger
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const sibs=[...e.target.parentElement.children].filter(c=>c.classList.contains('reveal'));
+        e.target.style.transitionDelay=(Math.max(0,sibs.indexOf(e.target))*0.12)+'s';
+        e.target.classList.add('in'); io.unobserve(e.target);
+      }
+    });
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // menu tabs with staggered items
+  function stagger(p){[...p.querySelectorAll('.item')].forEach((it,i)=>{it.style.animation='none';it.offsetHeight;it.style.animation='';it.style.animationDelay=(i*0.08)+'s'})}
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    const p=document.getElementById(t.dataset.t); p.classList.add('active'); stagger(p);
+  }));
+  stagger(document.querySelector('.panel.active'));
+
+  // subtle parallax on hero art
+  const hbg=document.querySelector('.hero-bg');
+  addEventListener('scroll',()=>{ if(scrollY<1000) hbg.style.transform=`translateY(${scrollY*0.25}px)`; },{passive:true});
+</script>
+</body>
+</html>
