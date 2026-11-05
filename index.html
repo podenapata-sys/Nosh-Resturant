@@ -6,7 +6,7 @@
 <title>NOSH Dhanmondi — Pan-Asian & Japanese Kitchen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500;600&family=Hind+Siliguri:wght@300;400;500;600&family=Noto+Serif+Bengali:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500;600&family=Noto+Serif+Bengali:wght@100..900&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#0f0d0b; --ink2:#181512; --ink3:#221d18;
@@ -41,12 +41,12 @@
   .navright{display:flex;align-items:center;gap:12px}
   .lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(15,13,11,.5);cursor:pointer;font-family:var(--sans)}
   .lang span{padding:6px 11px;border-radius:999px;font-size:12px;letter-spacing:.06em;color:var(--muted);transition:background .35s,color .35s}
-  .lang span[data-l="bn"]{font-family:'Hind Siliguri',sans-serif;font-size:13px;letter-spacing:0}
+  .lang span[data-l="bn"]{font-family:'Noto Serif Bengali',sans-serif;font-size:13px;letter-spacing:0}
   html[lang="en"] .lang span[data-l="en"], html[lang="bn"] .lang span[data-l="bn"]{background:var(--gold);color:var(--ink);font-weight:600}
   .swap{transition:opacity .22s ease}
   body.fading .swap{opacity:0}
   /* Bangla typography */
-  html[lang="bn"] body{font-family:'Hind Siliguri',var(--sans);font-weight:400}
+  html[lang="bn"] body{font-family:'Noto Serif Bengali',var(--sans);font-weight:400}
   html[lang="bn"] p{font-size:1.08em}
   html[lang="bn"] .sig p,html[lang="bn"] .item p,html[lang="bn"] .feat p,html[lang="bn"] .vcard p{font-size:16px}
   html[lang="bn"] .navlinks a{font-size:15px}
@@ -212,6 +212,15 @@
     *,*::before,*::after{animation:none!important;transition:none!important}
     h1 .line span,.hero p.lead,.hero-ctas,.meta,.reveal,.panel .item{opacity:1!important;transform:none!important}
   }
+
+  /* Bangla typography: Noto Serif Bengali (variable 100-900) */
+  html[lang="bn"] body,html[lang="bn"] button,html[lang="bn"] input,html[lang="bn"] select{font-family:'Inter','Noto Serif Bengali',serif;font-weight:400}
+  html[lang="bn"] p,html[lang="bn"] li{line-height:1.85}
+  html[lang="bn"] h1{font-weight:700!important;letter-spacing:0!important}
+  html[lang="bn"] h2,html[lang="bn"] h3,html[lang="bn"] h4,html[lang="bn"] h5{font-weight:650!important;letter-spacing:0!important}
+  html[lang="bn"] h1 em,html[lang="bn"] h2 em{font-weight:600!important}
+  html[lang="bn"] .kicker,html[lang="bn"] .btn,html[lang="bn"] .tab,html[lang="bn"] .badge,html[lang="bn"] .tag,html[lang="bn"] .k,html[lang="bn"] .navcta,html[lang="bn"] .navlinks a{font-weight:600;letter-spacing:.01em!important;text-transform:none}
+  .lang span[data-l="bn"]{font-family:'Noto Serif Bengali',serif!important;font-weight:600}
 </style>
 </head>
 <body>
